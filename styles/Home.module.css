@@ -68,7 +68,8 @@
   flex-grow: 1;
   font-size: 0.8rem;
   border-bottom: 2px solid #ddd;
-  padding: 20px;
+  padding-left: 3vw;
+  padding-right: 1vw;
 }
 
 .sect {

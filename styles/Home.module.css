@@ -68,13 +68,13 @@
   flex-grow: 1;
   font-size: 0.8rem;
   border-bottom: 2px solid #ddd;
+  padding: 20px;
 }
 
 .sect {
   display: flex;
   align-items: center;
-  width: 10vw;
-  margin-left: 4vw;
+  max-width: 10vw;
 }
 
 .title2 {

@@ -5,6 +5,29 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #fbfffe;
+  overflow: hidden;
+}
+.title span {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a {
+  text-decoration: none;
+  color: #000000;
+}
+.titleh1 {
+  margin: 0 0 1rem;
+  line-height: 1.15;
+  font-size: 3.6rem;
+  margin-bottom: 3vh;
+}
+
+.titleh1:hover,
+.titleh1:focus,
+.titleh1:active {
+  cursor: pointer;
 }
 
 .searchContainer {
@@ -46,10 +69,12 @@
 
 .categories {
   display: flex;
-  color: gray;
+  color: rgb(255, 255, 255);
+  background-color: #0070f3;
   justify-content: space-between;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
-  padding: 15px 60px 10px;
+  padding: 15px;
   height: 3rem;
   width: 70vw;
   border-bottom: 3px solid black;
@@ -64,44 +89,170 @@
 
 .bookContainer {
   display: flex;
-  justify-content: space-between;
+  background-color: #ffffff;
+  justify-content: space-around;
   flex-grow: 1;
   font-size: 0.8rem;
   border-bottom: 2px solid #ddd;
-  padding-left: 3vw;
-  padding-right: 1vw;
+  width: 70vw;
+}
+
+.cat {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 10vw;
+}
+
+#ai_cat {
+}
+
+#aiContainer {
+}
+
+.aiSummary {
+  cursor: pointer;
+  max-width: 100%;
+  height: auto;
+  background-color: #0070f3;
+}
+
+.amazonLogo {
+  cursor: pointer;
+  max-width: 100%;
+  height: auto;
 }
 
 .sect {
   display: flex;
   align-items: center;
-  max-width: 10vw;
+  justify-content: center;
+  width: 10vw;
 }
 
-.title2 {
+.info {
+  margin-bottom: 5vh;
 }
-
-.thumb {
-}
-
-.title a {
+.info p {
   color: #0070f3;
-  text-decoration: none;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
-}
-
-.title {
-  margin: 0 0 1rem;
-  line-height: 1.15;
-  font-size: 3.6rem;
+  font-weight: 800;
+  font-size: 1rem;
 }
 
 .bookThumbnail {
   max-width: 100%;
   height: auto;
+}
+
+.summaryContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  width: 70vw;
+  border: 3px solid black;
+
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  color: gray;
+
+  background-color: #fff;
+}
+
+.closeButton {
+  padding: 0.5rem 1rem;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.closeButton:hover {
+  background-color: #000000;
+  color: #fefefe;
+}
+
+.aiTitle {
+  color: #0070f3;
+  font-size: 1.5rem;
+}
+
+.summaryTitle {
+}
+
+.summaryText {
+}
+
+.footer {
+}
+
+.footerContents {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100vw;
+  height: 10vh;
+  font-size: 0.8rem;
+  color: #ffffff;
+  background-color: #0070f3;
+}
+
+.footerContents span {
+}
+
+@media only screen and (max-width: 768px) {
+  .searchInput {
+  }
+
+  .categories {
+  }
+
+  .category {
+  }
+
+  .bookContainer {
+  }
+
+  .summaryContent {
+  }
+
+  .footerContents {
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .container {
+    text-align: center;
+  }
+
+  .bookList {
+    justify-content: center;
+    align-items: center;
+  }
+  .searchInput {
+    width: 60vw;
+  }
+
+  .categories {
+    width: 100vw;
+  }
+  .category {
+    font-size: 0.6rem;
+  }
+
+  .bookContainer {
+    width: 100vw;
+  }
+
+  .summaryContent {
+    width: 80vw;
+  }
+
+  .footerContents {
+    width: 100vw;
+    font-size: 0.5rem;
+  }
 }

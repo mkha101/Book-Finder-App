@@ -1,8 +1,9 @@
-import Head from "next/head";
 import React, { useState } from "react";
 import axios from "axios";
 import Book from "../components/Book";
 import styles from "../styles/Home.module.css";
+import { title } from "../components/Book.js";
+import Footer from "../components/Footer";
 
 const API_URL = "https://www.googleapis.com/books/v1/volumes";
 
@@ -10,11 +11,12 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState([]);
   const [showCategories, setShowCategories] = useState(false);
+  const [loading, setLoading] = useState(false); // Track loading status
 
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}?q=${searchTerm}&maxResults=3`
+        `${API_URL}?q=${searchTerm}&maxResults=5`
       );
 
       const bookData = response.data.items;
@@ -22,6 +24,9 @@ export default function Home() {
         id: book.id,
         title: book.volumeInfo.title,
         subtitle: book.volumeInfo.subtitle,
+        isbn: book.volumeInfo.industryIdentifiers?.find(
+          (identifier) => identifier.type === "ISBN_10"
+        )?.identifier,
         authors: book.volumeInfo.authors || [],
         thumbnail: book.volumeInfo.imageLinks?.thumbnail,
       }));
@@ -33,12 +38,50 @@ export default function Home() {
     }
   };
 
+  const [summary, setSummary] = useState(null);
+
+  const generateBookSummary = async (title) => {
+    try {
+      const response = await fetch("/api/summary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+        }),
+      });
+
+      const data = await response.json();
+      const summary = data.summary;
+      setSummary(summary);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openSummaryPopup = (title) => {
+    generateBookSummary(title);
+  };
+
+  const closeSummaryPopup = () => {
+    setSummary(null);
+  };
   return (
     <div className={styles.container}>
       <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <div className={styles.title}>
+          <a href="">
+            {" "}
+            <h1 className={styles.titleh1}>
+              {" "}
+              Book<span>Finder</span>
+            </h1>
+          </a>
+        </div>
+        <div className={styles.info}>
+          <p>Get information on any book and generate a summary using Ai.</p>
+        </div>
 
         <div className={styles.searchContainer}>
           <input
@@ -56,17 +99,48 @@ export default function Home() {
         <div className={styles.bookList}>
           {showCategories && (
             <div className={styles.categories}>
-              <span>Title</span>
-              <span>Subtitle</span>
-              <span>Author</span>
-              <span>Thumbnail</span>
+              <div className={styles.cat}>
+                <span>Title</span>
+              </div>
+              <div className={styles.cat}>
+                <span>Subtitle</span>
+              </div>
+              <div className={styles.cat}>
+                <span>Author</span>
+              </div>{" "}
+              <div className={styles.cat}>
+                <span>Shop</span>
+              </div>
+              <div className={styles.cat}>
+                <span>Thumbnail</span>
+              </div>
+              <div id={styles.ai_cat} className={styles.cat}>
+                <span>Ai Summary</span>
+              </div>
             </div>
           )}
           {books.map((book) => (
-            <Book key={book.id} {...book} />
+            <Book key={book.id} openSummaryPopup={openSummaryPopup} {...book} />
           ))}
         </div>
+        <div className={styles.loading}></div>
+        {summary && (
+          <div className={styles.summaryPopup}>
+            <div className={styles.summaryContent}>
+              <h1 className={styles.aiTitle}>Ai Generated Summary:</h1>
+              <h3 className={styles.summaryTitle}>{title}</h3>
+              <p className={styles.summaryText}>{summary}</p>
+              <button
+                className={styles.closeButton}
+                onClick={closeSummaryPopup}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </main>
+      <Footer />
 
       <style jsx>{`
         main {

@@ -58,6 +58,26 @@
   background-color: #000000;
   color: #fefefe;
 }
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #000000;
+  border-bottom-color: #0070f3;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  margin-top: 2vh;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 .bookList {
   display: flex;
@@ -114,6 +134,10 @@
   cursor: pointer;
   max-width: 100%;
   height: auto;
+  background-color: #ffffff;
+}
+
+.aiSummary:hover {
   background-color: #0070f3;
 }
 
@@ -136,6 +160,17 @@
 .info p {
   color: #0070f3;
   font-weight: 800;
+  font-size: 1rem;
+}
+
+.error {
+  height: 1vh;
+}
+
+.error p {
+  color: #0070f3;
+
+  font-weight: 600;
   font-size: 1rem;
 }
 

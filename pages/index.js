@@ -11,36 +11,51 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState([]);
   const [showCategories, setShowCategories] = useState(false);
-  const [loading, setLoading] = useState(false); // Track loading status
+  const [loadingBooks, setLoadingBooks] = useState(false);
+  const [loadingSummary, setLoadingSummary] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSearch = async () => {
-    try {
-      const response = await axios.get(
-        `${API_URL}?q=${searchTerm}&maxResults=5`
-      );
+    if (searchTerm.trim() === "") {
+      setErrorMessage("Please enter search term first");
+    } else {
+      setErrorMessage("");
+      setLoadingBooks(true);
 
-      const bookData = response.data.items;
-      const bookList = bookData.map((book) => ({
-        id: book.id,
-        title: book.volumeInfo.title,
-        subtitle: book.volumeInfo.subtitle,
-        isbn: book.volumeInfo.industryIdentifiers?.find(
-          (identifier) => identifier.type === "ISBN_10"
-        )?.identifier,
-        authors: book.volumeInfo.authors || [],
-        thumbnail: book.volumeInfo.imageLinks?.thumbnail,
-      }));
-      setShowCategories(true);
-      setBooks(bookList);
-      console.log(bookList);
-    } catch (error) {
-      console.error(error);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      try {
+        const response = await axios.get(
+          `${API_URL}?q=${searchTerm}&maxResults=5`
+        );
+
+        const bookData = response.data.items;
+        const bookList = bookData.map((book) => ({
+          id: book.id,
+          title: book.volumeInfo.title,
+          subtitle: book.volumeInfo.subtitle,
+          isbn: book.volumeInfo.industryIdentifiers?.find(
+            (identifier) => identifier.type === "ISBN_10"
+          )?.identifier,
+          authors: book.volumeInfo.authors || [],
+          thumbnail: book.volumeInfo.imageLinks?.thumbnail,
+        }));
+        setShowCategories(true);
+        setBooks(bookList);
+        setLoadingBooks(false);
+
+        console.log(bookList);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const [summary, setSummary] = useState(null);
 
   const generateBookSummary = async (title) => {
+    setLoadingSummary(true);
+
     try {
       const response = await fetch("/api/summary", {
         method: "POST",
@@ -55,6 +70,7 @@ export default function Home() {
       const data = await response.json();
       const summary = data.summary;
       setSummary(summary);
+      setLoadingSummary(false);
     } catch (error) {
       console.error(error);
     }
@@ -82,7 +98,6 @@ export default function Home() {
         <div className={styles.info}>
           <p>Get information on any book and generate a summary using Ai.</p>
         </div>
-
         <div className={styles.searchContainer}>
           <input
             type="text"
@@ -95,7 +110,14 @@ export default function Home() {
         <button onClick={handleSearch} className={styles.searchButton}>
           Search Books
         </button>
-
+        {errorMessage && (
+          <div className={styles.error}>
+            <p>{errorMessage}</p>
+          </div>
+        )}
+        <div className={styles.loading}>
+          {loadingBooks && <span className={styles.loader}></span>}
+        </div>{" "}
         <div className={styles.bookList}>
           {showCategories && (
             <div className={styles.categories}>
@@ -123,7 +145,9 @@ export default function Home() {
             <Book key={book.id} openSummaryPopup={openSummaryPopup} {...book} />
           ))}
         </div>
-        <div className={styles.loading}></div>
+        <div className={styles.loading}>
+          {loadingSummary && <span className={styles.loader}></span>}
+        </div>{" "}
         {summary && (
           <div className={styles.summaryPopup}>
             <div className={styles.summaryContent}>
